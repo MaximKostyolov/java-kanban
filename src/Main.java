@@ -1,3 +1,6 @@
+import Manager.Manager;
+import Models.*;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -25,10 +28,10 @@ public class Main {
         System.out.println(manager.getEpicList());
 
         Task newTask = manager.getTaskById(task1.getId());
-        newTask.status = Status.DONE;
+        newTask.setStatus(Status.DONE);
         manager.updateTask(newTask, newTask.getId());
         Subtask newSubtask3 = manager.getSubtaskById(subtask3.getId());
-        newSubtask3.status = Status.DONE;
+        newSubtask3.setStatus(Status.DONE);
         manager.updateSubtask(newSubtask3, subtask3.getId());
 
 
