@@ -7,6 +7,10 @@ public class Main {
 
         System.out.println("Поехали!");
 
+        checkWork();
+    }
+
+    public static void checkWork() {
         Manager manager = new Manager();
         Task task1 = new Task("Поход в магазин", "Покупка продуктов");
         manager.createTask(task1);
