@@ -1,4 +1,4 @@
-import Manager.Manager;
+import Manager.*;
 import Models.*;
 
 public class Main {
@@ -11,7 +11,7 @@ public class Main {
     }
 
     public static void checkWork() {
-        Manager manager = new Manager();
+        TaskManager manager = Managers.getDefault();
         Task task1 = new Task("Поход в магазин", "Покупка продуктов");
         manager.createTask(task1);
         Task task2 = new Task("Снять квартиру", "Найти и забронировать квартиру для встречи с друзьями");
@@ -42,6 +42,20 @@ public class Main {
         System.out.println(manager.getTaskList());
         System.out.println(manager.getSubtaskList());
         System.out.println(manager.getEpicList());
+
+        Task task = manager.getTaskById(2);
+        task = manager.getSubtaskById(5);
+        task = manager.getEpicById(6);
+        task = manager.getTaskById(1);
+        task = manager.getSubtaskById(4);
+        task = manager.getEpicById(3);
+        task = manager.getTaskById(2);
+        task = manager.getSubtaskById(7);
+        task = manager.getEpicById(6);
+        task = manager.getEpicById(3);
+        task = manager.getTaskById(1);
+
+        System.out.println("История просмотров: " + manager.getHistory());
     }
 
 }
