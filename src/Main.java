@@ -1,3 +1,4 @@
+import History.HistoryManager;
 import Manager.*;
 import Models.*;
 
@@ -44,15 +45,15 @@ public class Main {
         System.out.println(manager.getEpicList());
 
         Task task = manager.getTaskById(2);
-        task = manager.getSubtaskById(5);
-        task = manager.getEpicById(6);
+        Subtask subtask = manager.getSubtaskById(5);
+        Epic epic = manager.getEpicById(6);
         task = manager.getTaskById(1);
-        task = manager.getSubtaskById(4);
-        task = manager.getEpicById(3);
+        subtask = manager.getSubtaskById(4);
+        epic = manager.getEpicById(3);
         task = manager.getTaskById(2);
-        task = manager.getSubtaskById(7);
-        task = manager.getEpicById(6);
-        task = manager.getEpicById(3);
+        subtask = manager.getSubtaskById(7);
+        epic = manager.getEpicById(6);
+        epic = manager.getEpicById(3);
         task = manager.getTaskById(1);
 
         System.out.println("История просмотров: " + manager.getHistory());
