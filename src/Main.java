@@ -57,6 +57,11 @@ public class Main {
         task = manager.getTaskById(1);
 
         System.out.println("История просмотров: " + manager.getHistory());
+
+        manager.removeEpicById(3);
+        manager.removeTaskById(2);
+
+        System.out.println("История просмотров после удаления задач: " + manager.getHistory());
     }
 
 }
