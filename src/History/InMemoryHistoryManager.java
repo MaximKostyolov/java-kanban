@@ -8,7 +8,7 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    CustomLinkedList linkedHistory = new CustomLinkedList<>();
+    private CustomLinkedList linkedHistory = new CustomLinkedList<>();
 
     @Override
     public void add(Task task) {
@@ -77,15 +77,17 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         public void removeNode(Node node) {
-            if (node.prev == null) {
-                node.next.prev = null;
-                head = node.next;
-            } else if (node.next == null) {
-                node.prev.next = null;
-                tail = node.prev;
-            } else {
-                node.next.prev = node.prev;
-                node.prev.next = node.next;
+            if (node != null) {
+                if (node.prev == null) {
+                    node.next.prev = null;
+                    head = node.next;
+                } else if (node.next == null) {
+                    node.prev.next = null;
+                    tail = node.prev;
+                } else {
+                    node.next.prev = node.prev;
+                    node.prev.next = node.next;
+                }
             }
         }
 
