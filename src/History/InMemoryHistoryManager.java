@@ -10,7 +10,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private CustomLinkedList linkedHistory = new CustomLinkedList<>();
 
-    @Override
+       @Override
     public void add(Task task) {
         linkedHistory.linkLast(task);
     }
@@ -78,12 +78,15 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         public void removeNode(Node node) {
             if (node != null) {
-                if (node.prev == null) {
+                if ((node.prev == null) && (node.next != null)) {
                     node.next.prev = null;
                     head = node.next;
-                } else if (node.next == null) {
+                } else if ((node.next == null) && (node.prev != null))  {
                     node.prev.next = null;
                     tail = node.prev;
+                } else if ((node.next == null) && (node.prev == null)) {
+                    head = null;
+                    tail = null;
                 } else {
                     node.next.prev = node.prev;
                     node.prev.next = node.next;

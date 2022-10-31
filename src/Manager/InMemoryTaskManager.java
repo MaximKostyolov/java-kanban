@@ -18,6 +18,14 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicList = new HashMap<>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
+    public static int getIdentificator() {
+        return identificator;
+    }
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
     @Override
     public ArrayList<Task> getTaskList() {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -73,16 +81,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = null;
-        boolean isValid = false;
         for (Integer key : taskList.keySet()) {
             if (key.equals(id)) {
                 task = taskList.get(id);
-                isValid = true;
                 historyManager.add(task);
             }
-        }
-        if (!isValid) {
-            System.out.println("Введен неверный идентификатор!");
         }
         return task;
     }
@@ -90,16 +93,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(int id) {
         Subtask subtask = null;
-        boolean isValid = false;
         for (Integer key : subtaskList.keySet()) {
             if (key.equals(id)) {
                 subtask = subtaskList.get(id);
-                isValid = true;
                 historyManager.add(subtask);
             }
-        }
-        if (!isValid) {
-            System.out.println("Введен неверный идентификатор!");
         }
         return subtask;
     }
@@ -107,16 +105,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int id) {
         Epic epic = null;
-        boolean isValid = false;
         for (Integer key : epicList.keySet()) {
             if (key.equals(id)) {
                 epic = epicList.get(id);
-                isValid = true;
                 historyManager.add(epic);
             }
-        }
-        if (!isValid) {
-            System.out.println("Введен неверный идентификатор!");
         }
         return epic;
     }
