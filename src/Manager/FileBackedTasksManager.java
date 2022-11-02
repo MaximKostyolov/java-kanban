@@ -22,15 +22,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public static void main(String[] args) {
 
-        //checkWritingToFile();
-        checkReadingFromFile();
+        checkWritingToFile();
+        //checkReadingFromFile();
 
     }
 
     public static void checkReadingFromFile() {
         String HOME = System.getProperty("user.home");
         Path file = Paths.get(HOME, "taskManager.csv");
-        FileBackedTasksManager manager = loadFromFile(file);
+        FileBackedTasksManager manager = loadFromFile(file.toFile());
         manager.createTask(new Task("Работа", "Сделать месячный отчет", Status.IN_PROGRESS));
         System.out.println("Задачи успешно считаны с файла и добавлена новая задача");
         System.out.println(manager.getHistory());
@@ -40,34 +40,35 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String HOME = System.getProperty("user.home");
         try {
             if (deleteIfExists(Paths.get(HOME, "taskManager.csv"))) {
-                Path taskManager = Files.createFile(Paths.get(HOME, "taskManager.csv"));
-                TaskManager manager = new FileBackedTasksManager(taskManager);
-                Task task1 = new Task("Поход в магазин", "Покупка продуктов");
-                manager.createTask(task1);
-                Task task2 = new Task("Снять квартиру", "Найти и забронировать квартиру для встречи с друзьями");
-                manager.createTask(task2);
-                Epic epic1 = new Epic("Обучение", "Закрыть долги по учебе");
-                manager.createEpic(epic1);
-                Subtask subtask1 = new Subtask("Спринт 3", "Сдать финальный проект 3-го спринта");
-                manager.createSubtask(subtask1, epic1.getId());
-                Subtask subtask2 = new Subtask("Спринт 4", "Сдать финальный проект 4-го спринта");
-                manager.createSubtask(subtask2, epic1.getId());
-                Epic epic2 = new Epic("Покупка машины", "Поиск и выбор оптимального варианта");
-                manager.createEpic(epic2);
-                Subtask subtask3 = new Subtask("Подбор автомобиля", "Поиск вариантов на Авито");
-                manager.createSubtask(subtask3, epic2.getId());
-                System.out.println("Задачи успешно записаны в файл taskManager.csv");
+                System.out.println("Файл taskManager.csv будет перезаписан");
             }
+            Path taskManager = Files.createFile(Paths.get(HOME, "taskManager.csv"));
+            TaskManager manager = new FileBackedTasksManager(taskManager);
+            Task task1 = new Task("Поход в магазин", "Покупка продуктов");
+            manager.createTask(task1);
+            Task task2 = new Task("Снять квартиру", "Найти и забронировать квартиру для встречи с друзьями");
+            manager.createTask(task2);
+            Epic epic1 = new Epic("Обучение", "Закрыть долги по учебе");
+            manager.createEpic(epic1);
+            Subtask subtask1 = new Subtask("Спринт 3", "Сдать финальный проект 3-го спринта");
+            manager.createSubtask(subtask1, epic1.getId());
+            Subtask subtask2 = new Subtask("Спринт 4", "Сдать финальный проект 4-го спринта");
+            manager.createSubtask(subtask2, epic1.getId());
+            Epic epic2 = new Epic("Покупка машины", "Поиск и выбор оптимального варианта");
+            manager.createEpic(epic2);
+            Subtask subtask3 = new Subtask("Подбор автомобиля", "Поиск вариантов на Авито");
+            manager.createSubtask(subtask3, epic2.getId());
+            System.out.println("Задачи успешно записаны в файл taskManager.csv");
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException("Не удалось записать менеджер задач в файл");
+        } catch (ManagerSaveException e) {
+            System.out.println(e.getDetailMessage());
         }
-
-
-
     }
 
     public void save() {
+        String history = historyToString(getHistoryManager());
         try (Writer fileWriter = new FileWriter(file.toFile())) {
             fileWriter.write("id,type,name,status,description,epic\n");
         } catch (IOException e) {
@@ -86,7 +87,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 }
             }
             fileWriter.write("\n");
-            fileWriter.write(historyToString(getHistoryManager()));
+            fileWriter.write(history);
         } catch (IOException e) {
             throw new ManagerSaveException("Не удалось сохранить в файл");
         } catch (ManagerSaveException e) {
@@ -94,10 +95,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public static FileBackedTasksManager loadFromFile(Path file) {
+    public static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager manager = null;
-        try (BufferedReader br = new BufferedReader(new FileReader(file.toFile()))) {
-            manager = new FileBackedTasksManager(file);
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            manager = new FileBackedTasksManager(file.toPath());
             List<String> lines = new ArrayList<>();
             while (br.ready()) {
                 String line = br.readLine();

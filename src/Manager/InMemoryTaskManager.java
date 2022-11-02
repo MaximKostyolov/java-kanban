@@ -16,7 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskList = new HashMap<>();
     private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
     private HashMap<Integer, Epic> epicList = new HashMap<>();
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    private static HistoryManager historyManager = Managers.getDefaultHistory();
 
     public static int getIdentificator() {
         return identificator;
@@ -120,6 +120,7 @@ public class InMemoryTaskManager implements TaskManager {
             identificator = identificator + 1;
             task.setId(identificator);
             taskList.put(identificator, task);
+            historyManager.add(task);
         }
     }
 
@@ -134,6 +135,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtaskId.add(identificator);
             epic.setSubtaskId(subtaskId);
             subtaskList.put(identificator, subtask);
+            historyManager.add(subtask);
         }
     }
 
@@ -164,6 +166,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
             epicList.put(identificator, epic);
+            historyManager.add(epic);
         }
     }
 
@@ -175,6 +178,7 @@ public class InMemoryTaskManager implements TaskManager {
                 if (key.equals(id)) {
                     taskList.put(id, newTask);
                     isValid = true;
+                    historyManager.add(newTask);
                 }
             }
             if (!isValid) {
@@ -191,6 +195,7 @@ public class InMemoryTaskManager implements TaskManager {
                 if (key.equals(id)) {
                     isValid = true;
                     subtaskList.put(id, newSubtask);
+                    historyManager.add(newSubtask);
                     Subtask subtask1 = subtaskList.get(key);
                     Epic epic = getEpicById(subtask1.getEpicId());
                     boolean isNew = true;
@@ -226,6 +231,7 @@ public class InMemoryTaskManager implements TaskManager {
                 if (key.equals(id)) {
                     isValid = true;
                     epicList.put(id, newEpic);
+                    historyManager.add(newEpic);
                     Epic epic = getEpicById(id);
                     if (epic.getStatus().equals(Status.DONE)) {
                         for (int subtaskId : epic.getSubtaskId()) {

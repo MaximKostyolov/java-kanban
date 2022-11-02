@@ -1,6 +1,11 @@
 import History.HistoryManager;
+import History.InMemoryHistoryManager;
 import Manager.*;
 import Models.*;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Main {
 
@@ -8,10 +13,14 @@ public class Main {
 
         System.out.println("Поехали!");
 
-        checkWork();
+        TaskManager manager = addTask();
+        updateTask(manager);
+        fillHistory(manager);
+        saveInFile(manager);
+        checkLoadFromFile();
     }
 
-    public static void checkWork() {
+    public static TaskManager addTask() {
         TaskManager manager = Managers.getDefault();
         Task task1 = new Task("Поход в магазин", "Покупка продуктов");
         manager.createTask(task1);
@@ -27,23 +36,21 @@ public class Main {
         manager.createEpic(epic2);
         Subtask subtask3 = new Subtask("Подбор автомобиля", "Поиск вариантов на Авито");
         manager.createSubtask(subtask3, epic2.getId());
+        System.out.println("Менеджер задач создан, задачи успешно добавлены");
+        return manager;
+    }
 
-        System.out.println(manager.getTaskList());
-        System.out.println(manager.getSubtaskList());
-        System.out.println(manager.getEpicList());
-
-        Task newTask = manager.getTaskById(task1.getId());
+    public static void updateTask(TaskManager manager) {
+        Task newTask = manager.getTaskById(1);
         newTask.setStatus(Status.DONE);
         manager.updateTask(newTask, newTask.getId());
-        Subtask newSubtask3 = manager.getSubtaskById(subtask3.getId());
+        Subtask newSubtask3 = manager.getSubtaskById(7);
         newSubtask3.setStatus(Status.DONE);
-        manager.updateSubtask(newSubtask3, subtask3.getId());
+        manager.updateSubtask(newSubtask3, newSubtask3.getId());
+        System.out.println("Задачи успешно обновлены");
+    }
 
-
-        System.out.println(manager.getTaskList());
-        System.out.println(manager.getSubtaskList());
-        System.out.println(manager.getEpicList());
-
+    public static void fillHistory(TaskManager manager) {
         Task task = manager.getTaskById(2);
         Subtask subtask = manager.getSubtaskById(5);
         Epic epic = manager.getEpicById(6);
@@ -55,13 +62,20 @@ public class Main {
         epic = manager.getEpicById(6);
         epic = manager.getEpicById(3);
         task = manager.getTaskById(1);
+        System.out.println("История просмотров задач: " + manager.getHistory());
+    }
 
-        System.out.println("История просмотров: " + manager.getHistory());
+    public static void saveInFile(TaskManager manager) {
+        Path taskManager = Paths.get("taskManager.csv");
+        FileBackedTasksManager fileManager = new FileBackedTasksManager(taskManager);
+        fileManager.save();
+        System.out.println("Mенеджер задач успешно записан в файл taskManager.csv");
+    }
 
-        manager.removeEpicById(3);
-        manager.removeTaskById(2);
-
-        System.out.println("История просмотров после удаления задач: " + manager.getHistory());
+    public static void checkLoadFromFile() {
+        TaskManager managerFromFile = FileBackedTasksManager.loadFromFile(new File("taskManager.csv"));
+        System.out.println("Менеджер задач успешно загружен из файла taskManager.csv");
+        System.out.println("История просмотров задач из загруженного файла: " + managerFromFile.getHistory());
     }
 
 }
