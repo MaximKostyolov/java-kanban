@@ -3,6 +3,7 @@ package History;
 import Models.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,6 +56,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         public List<Task> getTasks() {
             List<Task> history = new ArrayList<>();
+            if ((head == null) && (tail == null)) {
+                return Collections.emptyList();
+            }
             if (tail != head) {
                 Node newTail = new Node<>(tail.data, tail.prev);
                 while (newTail.data != head.data) {
