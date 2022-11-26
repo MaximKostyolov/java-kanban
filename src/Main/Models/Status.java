@@ -1,4 +1,4 @@
-package Models;
+package Main.Models;
 
 public enum Status {
 

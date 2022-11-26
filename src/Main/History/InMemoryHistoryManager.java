@@ -1,6 +1,6 @@
-package History;
+package Main.History;
 
-import Models.*;
+import Main.Models.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

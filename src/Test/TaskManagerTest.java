@@ -1,12 +1,13 @@
-package Manager;
+package Test;
 
-import Models.Epic;
-import Models.Subtask;
-import Models.Task;
+import Main.Manager.TaskManager;
+import Main.Models.Epic;
+import Main.Models.Subtask;
+import Main.Models.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
-import static Models.Status.*;
+import static Main.Models.Status.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;

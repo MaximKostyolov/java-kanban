@@ -1,24 +1,22 @@
-package Manager;
+package Main.Manager;
 
-import History.HistoryManager;
-import Models.Epic;
-import Models.Status;
-import Models.Subtask;
-import Models.Task;
+import Main.History.HistoryManager;
+import Main.Models.Epic;
+import Main.Models.Status;
+import Main.Models.Subtask;
+import Main.Models.Task;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class InMemoryTaskManager implements TaskManager {
 
     private static int identificator = 0;
-    private static HashMap<Integer, Task> taskList = new HashMap<>();
-    private static HashMap<Integer, Subtask> subtaskList = new HashMap<>();
-    private static HashMap<Integer, Epic> epicList = new HashMap<>();
-    private static HistoryManager historyManager = Managers.getDefaultHistory();
+    protected static final HashMap<Integer, Task> taskList = new HashMap<>();
+    protected static final HashMap<Integer, Subtask> subtaskList = new HashMap<>();
+    protected static final HashMap<Integer, Epic> epicList = new HashMap<>();
+    private static final HistoryManager historyManager = Managers.getDefaultHistory();
 
     public static int getIdentificator() {
         return identificator;
@@ -226,7 +224,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (key.equals(id)) {
                 task = taskList.get(id);
                 historyManager.add(task);
-                break;
+                //break;
             }
         }
         return task;
@@ -239,7 +237,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (key.equals(id)) {
                 subtask = subtaskList.get(id);
                 historyManager.add(subtask);
-                break;
+                //break;
             }
         }
         return subtask;
@@ -252,7 +250,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (key.equals(id)) {
                 epic = epicList.get(id);
                 historyManager.add(epic);
-                break;
+                //break;
             }
         }
         return epic;
@@ -282,7 +280,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setSubtaskId(subtasksId);
             subtask = checkTimeIntersection(subtask);
             subtaskList.put(identificator, subtask);
-            System.out.println("Подзадача " + subtask.getName() + " успешно дабавлена");
+            System.out.println("Подзадача " + subtask.getName() + " успешно добавлена");
             historyManager.add(subtask);
             setEpicStatus(epic);
             setStartTimeToEpic(epic);

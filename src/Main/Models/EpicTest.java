@@ -1,11 +1,11 @@
-package Models;
+package Main.Models;
 
-import Manager.Managers;
-import Manager.TaskManager;
+import Main.Manager.Managers;
+import Main.Manager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static Models.Status.*;
+import static Main.Models.Status.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EpicTest {

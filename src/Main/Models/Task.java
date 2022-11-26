@@ -1,4 +1,4 @@
-package Models;
+package Main.Models;
 
 import java.time.LocalDateTime;
 
@@ -122,8 +122,8 @@ public class Task {
     public String toString() {
         return "Task{" +
                 "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
+                ", name=" + getName() +
+                ", description=" + getDescription() +
                 ", status=" + getStatus() +
                 ", startTime=" + getStartTime() +
                 ", duration=" + getDuration() +
@@ -140,9 +140,9 @@ public class Task {
             return false;
         }
         Task task = (Task) o;
-        return  ((getId() == task.getId()) && (getName().equals(task.getName())) &&
-                (getDescription().equals(task.getDescription())) && (getStatus() != task.getStatus()) && (getStartTime().
-                equals(task.getStartTime())) && (getDuration() == task.getDuration()) && (getEndTime().equals(task.getEndTime())));
+        return  ((this.getId() == task.getId()) && (this.getName().equals(task.getName())) &&
+                (this.getDescription().equals(task.getDescription())) && (this.getStatus().equals(task.getStatus())) && (this.getStartTime() ==
+                task.getStartTime()) && (this.getDuration() == task.getDuration()) && (this.getEndTime() == task.getEndTime()));
     }
 
     @Override

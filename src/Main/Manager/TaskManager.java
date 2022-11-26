@@ -1,9 +1,9 @@
-package Manager;
+package Main.Manager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Models.*;
+import Main.Models.*;
 
 public interface TaskManager {
 

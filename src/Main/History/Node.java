@@ -1,6 +1,6 @@
-package History;
+package Main.History;
 
-import Models.Task;
+import Main.Models.Task;
 
 public class Node <T extends Task> {
 

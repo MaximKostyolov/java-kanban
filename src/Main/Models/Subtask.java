@@ -1,4 +1,4 @@
-package Models;
+package Main.Models;
 
 import java.time.LocalDateTime;
 
@@ -38,8 +38,8 @@ public class Subtask extends Task {
     public String toString() {
         return "Subtask{" +
                 "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
+                ", name=" + getName() +
+                ", description=" + getDescription() +
                 ", status=" + getStatus() +
                 ", startTime=" + getStartTime() +
                 ", duration=" + getDuration() +
@@ -57,10 +57,10 @@ public class Subtask extends Task {
             return false;
         }
         Subtask subtask = (Subtask) o;
-        return  ((getId() == subtask.getId()) && (getName().equals(subtask.getName())) &&
-                (getDescription().equals(subtask.getDescription())) && (getStatus() != subtask.getStatus()) && (getStartTime().
-                equals(subtask.getStartTime())) && (getDuration() == subtask.getDuration()) && (getEndTime().equals(subtask.getEndTime())) &&
-                (getEpicId() == subtask.getEpicId()));
+        return  ((this.getId() == subtask.getId()) && (this.getName().equals(subtask.getName())) &&
+                (this.getDescription().equals(subtask.getDescription())) && (this.getStatus().equals(subtask.getStatus())) && (this.getStartTime() ==
+                subtask.getStartTime()) && (this.getDuration() == subtask.getDuration()) && (this.getEndTime() == subtask.getEndTime()) &&
+                (this.getEpicId() == subtask.getEpicId()));
     }
 
 }

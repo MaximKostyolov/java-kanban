@@ -1,7 +1,7 @@
-package History;
+package Test;
 
-import Models.*;
-import Manager.*;
+import Main.Models.*;
+import Main.Manager.*;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;

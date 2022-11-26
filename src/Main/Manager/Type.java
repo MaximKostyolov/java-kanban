@@ -1,4 +1,4 @@
-package Manager;
+package Main.Manager;
 
 public enum Type {
 

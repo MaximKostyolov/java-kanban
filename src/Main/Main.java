@@ -1,5 +1,7 @@
-import Manager.*;
-import Models.*;
+package Main;
+
+import Main.Manager.*;
+import Main.Models.*;
 
 import java.io.*;
 import java.nio.file.Paths;
@@ -17,7 +19,7 @@ public class Main {
         fillHistory(manager);
         checkTimeInterseption(manager);
         saveInFile(manager);
-        checkLoadFromFile(manager); // при загрузке из файла - файл обновляется
+        checkLoadFromFile(Managers.getDefault());
     }
 
     public static void checkTimeInterseption(TaskManager manager) {
@@ -86,7 +88,7 @@ public class Main {
 
     public static void saveInFile(TaskManager manager) {
         try {
-            if (deleteIfExists(Paths.get("taskManager.csv"))) {
+            if (deleteIfExists(Paths.get("resourses","taskManager.csv"))) {
                 System.out.println("Файл taskManager.csv будет перезаписан");
             }
         } catch (IOException e) {
@@ -94,7 +96,7 @@ public class Main {
         } catch (ManagerSaveException e) {
             System.out.println(e.getDetailMessage());
         }
-        manager = new FileBackedTasksManager(Paths.get("taskManager.csv"));
+        manager = new FileBackedTasksManager(Paths.get("resourses","taskManager.csv"));
         ((FileBackedTasksManager) manager).save();
         System.out.println("Mенеджер задач успешно записан в файл taskManager.csv");
     }
@@ -104,8 +106,8 @@ public class Main {
         manager.removeTaskList();
         InMemoryTaskManager.setIdentificator(0);
         System.out.println("Менеджер будет загружен из файла");
-        FileBackedTasksManager managerFromFile = FileBackedTasksManager.loadFromFile(Paths.get("taskManager.csv").toFile());
-        System.out.println("Менеджер задач успешно загружен из файла taskManager.csv");
+        FileBackedTasksManager managerFromFile = FileBackedTasksManager.loadFromFile(Paths.get("resourses", "taskManager.csv").toFile());
+        System.out.println("Менеджер задач успешно загружен из файла resourses/taskManager.csv");
         System.out.println("История просмотров задач из загруженного файла: " + managerFromFile.getHistory());
         System.out.println("Список отсортированных задач в порядке вренени cтарта");
         System.out.println(managerFromFile.getPrioritizedTasks());

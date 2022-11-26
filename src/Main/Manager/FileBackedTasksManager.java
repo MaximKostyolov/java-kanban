@@ -1,7 +1,8 @@
-package Manager;
+package Main.Manager;
 
-import History.HistoryManager;
-import Models.*;
+import Main.History.HistoryManager;
+import Main.Models.*;
+import org.apache.groovy.json.internal.ArrayUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -89,14 +90,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         try (Writer fileWriter = new FileWriter(file.toFile(), true)) {
             String history = historyToString(InMemoryTaskManager.getHistoryManager());
             for (int id = 1; id <= InMemoryTaskManager.getIdentificator(); id++) {
-                if (getTaskById(id) != null) {
-                    fileWriter.write(toString(getTaskById(id)) + "\n");
+                if (taskList.containsKey(id)) {
+                    fileWriter.write(toString(taskList.get(id)) + "\n");
                 }
-                if (getSubtaskById(id) != null) {
-                    fileWriter.write(toString(getSubtaskById(id)) + "\n");
+                if (subtaskList.containsKey(id)) {
+                    fileWriter.write(toString(subtaskList.get(id)) + "\n");
                 }
-                if (getEpicById(id) != null) {
-                    fileWriter.write(toString(getEpicById(id)) + "\n");
+                if (epicList.containsKey(id)) {
+                    fileWriter.write(toString(epicList.get(id)) + "\n");
                 }
             }
             fileWriter.write("\n");
@@ -121,14 +122,18 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             for (int i = 1; i < (lines.size() - 2); i++) {
                 tasks.add(manager.fromString(lines.get(i)));
             }
-            List<Integer> historyId = historyFromString(lines.get(lines.size() - 1));
-            for (Integer id : historyId) {
-                if (manager.getTaskById(id) != null) {
-                    Task historyTask = manager.getTaskById(id);
-                } else if (manager.getSubtaskById(id) != null) {
-                    Subtask historyTask = manager.getSubtaskById(id);
-                } else if (manager.getEpicById(id) != null) {
-                    Epic historyEpic = manager.getEpicById(id);
+            if (lines.size() > 1) {
+                List<Integer> historyIds = historyFromString(lines.get(lines.size() - 1));
+                while (!historyIds.isEmpty()) {
+                    Integer historyId = historyIds.get(0);
+                    if (manager.getTaskById(historyId) != null) {
+                        Task historyTask = manager.getTaskById(historyId);
+                    } else if (manager.getSubtaskById(historyId) != null) {
+                        Subtask historySubtask = manager.getSubtaskById(historyId);
+                    } else if (manager.getEpicById(historyId) != null) {
+                        Epic historyEpic = manager.getEpicById(historyId);
+                    }
+                    historyIds.remove(0);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -227,12 +232,33 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static List<Integer> historyFromString(String value) {
-        List<Integer> historyId = new ArrayList<>();
+        List<Integer> historyIds = new ArrayList<>();
         String[] history = value.split(",");
         for (int i = history.length - 1; i >= 0; i--) {
-            historyId.add(Integer.parseInt(history[i]));
+            historyIds.add(Integer.parseInt(history[i]));
         }
-        return historyId;
+        return historyIds;
+    }
+
+    @Override
+    public Task getTaskById(int id) {
+        Task task = super.getTaskById(id);
+        save();
+        return task;
+    }
+
+    @Override
+    public Subtask getSubtaskById(int id) {
+        Subtask subtask = super.getSubtaskById(id);
+        save();
+        return subtask;
+    }
+
+    @Override
+    public Epic getEpicById(int id) {
+        Epic epic = super.getEpicById(id);
+        save();
+        return epic;
     }
 
     @Override
