@@ -2,7 +2,6 @@ package Main.Manager;
 
 import Main.History.HistoryManager;
 import Main.Models.*;
-import org.apache.groovy.json.internal.ArrayUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -16,11 +15,26 @@ import static java.nio.file.Files.deleteIfExists;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    public final Path file;
+    public Path file;
 
     public FileBackedTasksManager(Path file) {
         this.file = file;
+        /*try {
+            Path dir = Files.createFile(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
     }
+
+    public FileBackedTasksManager() {
+        try {
+            deleteIfExists(Paths.get("resourses", "FileBackedTestManager.csv"));
+            this.file = Files.createFile(Paths.get("resourses", "FileBackedTestManager.csv"));
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
 
     public static void main(String[] args) {
 

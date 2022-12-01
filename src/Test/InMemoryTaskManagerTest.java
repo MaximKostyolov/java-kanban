@@ -14,7 +14,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
 
     @AfterEach
     void deleteManager() {
-        InMemoryTaskManager.setIdentificator(0);
+        manager.setIdentificator(0);
         manager.removeEpicList();
         manager.removeTaskList();
     }

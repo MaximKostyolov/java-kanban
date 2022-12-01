@@ -1,9 +1,19 @@
 package Main;
 
+import Main.HTTPTaskServer.LocalDateTimeAdapter;
+import Main.HTTPTaskServer.TaskHandler;
+import Main.KVServer.KVServer;
 import Main.Manager.*;
 import Main.Models.*;
+import com.google.gson.*;
+import com.sun.net.httpserver.HttpServer;
 
 import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
@@ -19,7 +29,64 @@ public class Main {
         fillHistory(manager);
         checkTimeInterseption(manager);
         saveInFile(manager);
-        checkLoadFromFile(Managers.getDefault());
+        FileBackedTasksManager managerFromFile = checkLoadFromFile(Managers.getDefault());
+        saveManagerOnServer(managerFromFile);
+        HTTPTaskManager httpTaskManager = loadManagerFromServer();
+        testAPI(managerFromFile);
+
+    }
+
+    public static HTTPTaskManager loadManagerFromServer() {
+         HTTPTaskManager httpTaskManager = HTTPTaskManager.loadFromServer("KEY", URI.create("http://localhost:8078"));
+         System.out.println("История просмотров загруженного httpTaskManager-а:");
+         System.out.println(httpTaskManager.getHistory());
+         return httpTaskManager;
+    }
+
+    public static void testAPI(FileBackedTasksManager managerFromFile) {
+        System.out.println("Тестируем API");
+        managerFromFile.setIdentificator(0);
+        managerFromFile.removeEpicList();
+        managerFromFile.removeTaskList();
+        try {
+            HttpServer httpServer = HttpServer.create();
+            httpServer.bind(new InetSocketAddress(8088), 0);
+            httpServer.createContext("/tasks", new TaskHandler());
+            httpServer.start(); // запускаем сервер
+            System.out.println("HTTP-сервер запущен на " + 8088 + " порту!");
+
+            URI postUri = URI.create("http://localhost:8088/tasks/task/");
+            HttpClient client = HttpClient.newHttpClient();
+            Task task = new Task("Прогулка", "Ежедневная прогулка");
+            Gson json = new GsonBuilder()
+                    .serializeNulls()
+                    .setPrettyPrinting()
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                    .create();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .POST(HttpRequest.BodyPublishers.ofString(json.toJson(task)))
+                    .uri(postUri)
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    public static void saveManagerOnServer(FileBackedTasksManager managerFromFile) {
+        System.out.println("Cохраняем менеджер на сервер");
+        try {
+            KVServer server = new KVServer();
+            server.start();
+            HTTPTaskManager httpTaskManager = new HTTPTaskManager(URI.create("http://localhost:8078"));
+            System.out.println("httpTaskManager cоздан!");
+            httpTaskManager.save();
+            System.out.println("История просмотров httpTaskManager-а:");
+            System.out.println(httpTaskManager.getHistory());
+            httpTaskManager.setIdentificator(0);
+        } catch (IOException exception) {
+            System.out.println(exception.getMessage());
+        }
     }
 
     public static void checkTimeInterseption(TaskManager manager) {
@@ -98,21 +165,21 @@ public class Main {
         }
         manager = new FileBackedTasksManager(Paths.get("resourses","taskManager.csv"));
         ((FileBackedTasksManager) manager).save();
+        ((InMemoryTaskManager) manager).setIdentificator(0);
         System.out.println("Mенеджер задач успешно записан в файл taskManager.csv");
+
     }
 
-    public static void checkLoadFromFile(TaskManager manager) {
+    public static FileBackedTasksManager checkLoadFromFile(TaskManager manager) {
         manager.removeEpicList();
         manager.removeTaskList();
-        InMemoryTaskManager.setIdentificator(0);
         System.out.println("Менеджер будет загружен из файла");
         FileBackedTasksManager managerFromFile = FileBackedTasksManager.loadFromFile(Paths.get("resourses", "taskManager.csv").toFile());
         System.out.println("Менеджер задач успешно загружен из файла resourses/taskManager.csv");
         System.out.println("История просмотров задач из загруженного файла: " + managerFromFile.getHistory());
         System.out.println("Список отсортированных задач в порядке вренени cтарта");
         System.out.println(managerFromFile.getPrioritizedTasks());
+        return managerFromFile;
     }
 
 }
-
-

@@ -1,0 +1,4 @@
+id,type,name,status,description,startTime,duration,endTime,epic
+1,TASK,Test addNewTask,NEW,Test addNewTask description,null,0,null,
+
+1

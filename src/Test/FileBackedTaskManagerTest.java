@@ -41,7 +41,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksMa
     @AfterEach
     void deleteManager() {
             manager.setIdentificator(0);
-            //manager.removeEpicList();
+            manager.removeEpicList();
             manager.removeTaskList();
     }
 

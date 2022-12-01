@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HistoryManagerTest {
 
-    private TaskManager manager;
+    private InMemoryTaskManager manager;
 
     @BeforeEach
     void setUp() {
-        manager = Managers.getDefault();
+        manager = new InMemoryTaskManager();
     }
 
     @AfterEach
     void deleteManager() {
-        InMemoryTaskManager.setIdentificator(0);
+        manager.setIdentificator(0);
         manager.removeEpicList();
         manager.removeTaskList();
     }

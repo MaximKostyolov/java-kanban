@@ -12,8 +12,17 @@ public class Task {
     private long duration;
     private LocalDateTime endTime;
 
-    public Task(String name, String description, Status status, LocalDateTime startTime, long duration, LocalDateTime endTime) {
+    public Task(int id, String name, String description, Status status, LocalDateTime startTime, long duration, LocalDateTime endTime) {
         this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.endTime = endTime;
+    }
+
+    public Task(String name, String description, Status status, LocalDateTime startTime, long duration, LocalDateTime endTime) {
         this.name = name;
         this.description = description;
         this.status = status;
@@ -59,6 +68,14 @@ public class Task {
         this.endTime = null;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -73,14 +90,6 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Status getStatus() {
@@ -128,7 +137,7 @@ public class Task {
                 ", startTime=" + getStartTime() +
                 ", duration=" + getDuration() +
                 ", endTime=" + getEndTime() +
-                '}';
+                "}";
     }
 
     @Override

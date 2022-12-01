@@ -22,8 +22,8 @@ public class InMemoryTaskManager implements TaskManager {
         return identificator;
     }
 
-    public static void setIdentificator(int identificator) {
-        InMemoryTaskManager.identificator = identificator;
+    public void setIdentificator(int identificator) {
+        this.identificator = identificator;
     }
 
     public static HistoryManager getHistoryManager() {
@@ -99,7 +99,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public TreeSet<Task> getPrioritizedTasks() {
+    public static TreeSet<Task> getPrioritizedTasks() {
         Comparator<Task> comparator = (task1, task2) -> {
             LocalDateTime date1 = task1.getStartTime();
             LocalDateTime date2 = task2.getStartTime();
@@ -108,6 +108,9 @@ public class InMemoryTaskManager implements TaskManager {
             }
             if (date2 == null) {
                 return -1;
+            }
+            if ((date1 == null) && (date2 == null)) {
+                return task1.getId() - task2.getId();
             }
             int compareByDate = date1.compareTo(date2);
             if (compareByDate != 0) {
