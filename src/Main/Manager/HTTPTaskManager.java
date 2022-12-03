@@ -1,32 +1,28 @@
 package Main.Manager;
 
-
-import Main.KVServer.KVServer;
-import Main.KVServer.KVTaskKlient;
+import Main.KVClient.KVTaskClient;
 import Main.Models.Epic;
 import Main.Models.Subtask;
 import Main.Models.Task;
-
 import java.io.*;
 import java.net.URI;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HTTPTaskManager extends FileBackedTasksManager {
 
-    private static KVTaskKlient klient;
+    private static KVTaskClient сlient;
     private URI uri;
 
     public HTTPTaskManager(URI uri) throws IOException {
         this.uri = uri;
-        this.klient = new KVTaskKlient(uri);
+        this.сlient = new KVTaskClient(uri);
     }
 
     public static HTTPTaskManager loadFromServer(String key, URI uri) {
         try {
             HTTPTaskManager manager = new HTTPTaskManager(uri);
-            String managerInString = klient.load(key);
+            String managerInString = сlient.load(key);
             String[] lines = managerInString.split("/");
             List<Task> tasks = new ArrayList<>();
             for (int i = 1; i < (lines.length - 2); i++) {
@@ -70,10 +66,10 @@ public class HTTPTaskManager extends FileBackedTasksManager {
         }
         managerToString = managerToString + "\n";
         managerToString = managerToString + history;
-        klient.put("KEY", managerToString);
+        сlient.put("KEY", managerToString);
     }
 
-    public static KVTaskKlient getKlient() {
-        return klient;
+    public static KVTaskClient getClient() {
+        return сlient;
     }
 }

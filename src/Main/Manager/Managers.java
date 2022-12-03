@@ -2,27 +2,23 @@ package Main.Manager;
 
 import Main.History.HistoryManager;
 import Main.History.InMemoryHistoryManager;
-
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Paths;
 
 public class Managers {
 
     public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+        TaskManager manager = null;
+        try {
+            manager = new HTTPTaskManager(URI.create("http://localhost:8078"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return manager;
     }
-
-    public static HTTPTaskManager getHTTPTaskManager() throws IOException {
-        return new HTTPTaskManager(URI.create("http://localhost:8078"));
-    }
-
-    public static FileBackedTasksManager getFileBackedTasksManager() {
-        return new FileBackedTasksManager(Paths.get("resourses/", "FileBackedTaskManager"));
-    }
-
 
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
+
 }

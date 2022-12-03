@@ -17,12 +17,9 @@ import java.nio.file.Path;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.nio.file.Files.deleteIfExists;
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksManager> {

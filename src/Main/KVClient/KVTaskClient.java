@@ -1,4 +1,4 @@
-package Main.KVServer;
+package Main.KVClient;
 
 import java.io.IOException;
 import java.net.URI;
@@ -6,14 +6,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-public class KVTaskKlient {
+public class KVTaskClient {
 
     private URI uri;
     private String apiToken;
 
-    public KVTaskKlient (URI uri) {
+    public KVTaskClient (URI uri) {
         this.uri = uri;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
