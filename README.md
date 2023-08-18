@@ -1,4 +1,4 @@
-java-kanban
+Java-kanban
 
 Java-kanban - это бэкенд для трекера задач
 
